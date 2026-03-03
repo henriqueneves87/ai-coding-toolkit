@@ -9,7 +9,7 @@ Escopo: Planejamento de tarefas multi-etapas, correcoes de bug, features, refato
 
 ## Objetivo
 
-Gerar um execution plan estruturado e detalhado que qualquer IA consiga executar sem ambiguidade, com suporte a mapeamento de codebase grande (Fase 0) e execucao paralela via subagentes (modo orquestrado). O plano e salvo em `docs/00_overview/execution_plans/` e segue o formato padrao da skill `create-execution-plan` v2.0.
+Gerar um execution plan estruturado e detalhado que qualquer IA consiga executar sem ambiguidade, com suporte a mapeamento de codebase grande (Fase 0) e execucao paralela via subagentes (modo orquestrado). O plano e salvo em `docs/00_overview/execution_plans/` com numeracao sequencial e segue o formato padrao da skill `create-execution-plan` v2.0.
 
 ---
 
@@ -96,7 +96,8 @@ Aplicar a skill `create-execution-plan` e gerar o documento com TODAS as secoes 
 
 ### 7. Salvar e apresentar
 
-- Salvar em `docs/00_overview/execution_plans/{nome_snake_case}.md`
+- Determinar proximo numero sequencial: contar `.md` em `docs/00_overview/execution_plans/` + 1 (zero-padding de 3 digitos: `001`, `002`, etc.)
+- Salvar em `docs/00_overview/execution_plans/{NNN}_{nome_snake_case}.md`
 - Apresentar resumo ao usuario:
   - Tabela de tarefas com estimativas
   - Ordem de execucao (blocos paralelos destacados)
@@ -109,8 +110,9 @@ Aplicar a skill `create-execution-plan` e gerar o documento com TODAS as secoes 
 
 APOS salvar o execution plan, gerar AUTOMATICAMENTE o arquivo de prompt universal:
 
-- Salvar em `docs/prompts_execucao_{nome_snake_case}.md`
-- Seguir o modelo de `docs/prompts_execucao_saphiro.md` (se existir no projeto)
+- Usar o MESMO numero do plano gerado acima
+- Salvar em `docs/04_operations/prompts_execucao_{NNN}_{nome_snake_case}.md`
+- Seguir o modelo de `docs/04_operations/prompts_execucao_saphiro.md` (se existir no projeto)
 - Incluir AMBOS os prompts: manual e orquestrado
 - Incluir mapa de conflitos de arquivo
 - Ver estrutura completa na skill `create-execution-plan` v2.0
@@ -151,7 +153,7 @@ Este command pode ser combinado com:
 [usuario cola logs de erro]
 ```
 
-**Resultado:** Plano com diagnostico (mapa de campos faltando), tarefas com snippets exatos, ordem de execucao, metricas de sucesso. Modo manual.
+**Resultado:** Plano com diagnostico (mapa de campos faltando), tarefas com snippets exatos, ordem de execucao, metricas de sucesso. Salvo como `001_checkout_erros_pagamento.md`. Modo manual.
 
 ### Refatoracao de codebase grande
 
@@ -159,7 +161,7 @@ Este command pode ser combinado com:
 /create-execution-plan --map refatorar modulo de pagamentos para separar responsabilidades
 ```
 
-**Resultado:** Fase 0 ativada (mapeamento com subagentes), plano com mapa do codebase, tarefas com antes/depois, blocos paralelos. Modo orquestrado.
+**Resultado:** Fase 0 ativada (mapeamento com subagentes), plano com mapa do codebase, tarefas com antes/depois, blocos paralelos. Salvo como `002_refatoracao_pagamentos.md`. Modo orquestrado.
 
 ### Feature com execucao paralela
 
@@ -167,7 +169,7 @@ Este command pode ser combinado com:
 /create-execution-plan --parallel implementar modulo de boletos com registro, consulta, cancelamento e impressao
 ```
 
-**Resultado:** Plano com tarefas independentes em blocos paralelos, prompt orquestrado para subagentes. Modo orquestrado.
+**Resultado:** Plano com tarefas independentes em blocos paralelos, prompt orquestrado para subagentes. Salvo como `003_modulo_boletos.md`. Modo orquestrado.
 
 ---
 

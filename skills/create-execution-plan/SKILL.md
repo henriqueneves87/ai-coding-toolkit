@@ -341,8 +341,8 @@ Cada sub-plano segue o mesmo formato (cabecalho, tarefas, notas para IA, metrica
 
 Apos salvar o execution plan, SEMPRE gerar o arquivo de prompt universal.
 
-**Salvar em:** `docs/prompts_execucao_{nome_snake_case}.md`
-**Modelo de referencia:** `docs/prompts_execucao_saphiro.md` (se existir no projeto)
+**Salvar em:** `docs/04_operations/prompts_execucao_{NNN}_{nome_snake_case}.md` (mesmo numero do plano)
+**Modelo de referencia:** `docs/04_operations/prompts_execucao_saphiro.md` (se existir no projeto)
 
 ### Estrutura obrigatoria
 
@@ -453,10 +453,47 @@ Ao gerar o plano, referenciar skills aplicaveis nas Notas para IA:
 10. **Escolher modo** — manual, orquestrado ou hibrido
 11. **Definir metricas** — como saber que deu certo
 12. **Definir rollback** — como reverter se der errado (quando aplicavel)
-13. **Salvar** — em `docs/00_overview/execution_plans/{nome}.md`
-14. **Gerar prompt universal** — em `docs/prompts_execucao_{nome}.md`
+13. **Salvar** — em `docs/00_overview/execution_plans/{NNN}_{nome}.md` (ver Regra de Numeracao abaixo)
+14. **Gerar prompt universal** — em `docs/04_operations/prompts_execucao_{NNN}_{nome}.md` (mesmo numero do plano)
 15. **Apresentar ao usuario** — resumo + pedir confirmacao antes de executar
 16. **NAO executar sem confirmacao explicita**
+
+---
+
+## Regra de Numeracao de Arquivos
+
+Todo execution plan e seu prompt de execucao DEVEM receber um numero sequencial de 3 digitos com zero-padding.
+
+### Como numerar
+
+1. Contar quantos arquivos `*.md` existem em `docs/00_overview/execution_plans/`
+2. Proximo numero = contagem + 1 (com zero-padding: `001`, `002`, ..., `010`, `011`, etc.)
+3. Usar o MESMO numero para o plano e para o prompt de execucao
+
+### Formato dos nomes
+
+```
+docs/00_overview/execution_plans/NNN_nome_snake_case.md
+docs/04_operations/prompts_execucao_NNN_nome_snake_case.md
+```
+
+### Exemplos
+
+```
+docs/00_overview/execution_plans/001_checkout_multi_meio.md
+docs/04_operations/prompts_execucao_001_checkout_multi_meio.md
+
+docs/00_overview/execution_plans/002_banking_basico.md
+docs/04_operations/prompts_execucao_002_banking_basico.md
+
+docs/00_overview/execution_plans/010_refatoracao_pagamentos.md
+docs/04_operations/prompts_execucao_010_refatoracao_pagamentos.md
+```
+
+### Beneficio
+
+O numero garante que ao abrir a pasta vc ve os planos em ordem cronologica de criacao.
+O arquivo com numero mais alto e sempre o mais recente.
 
 ---
 
