@@ -3,7 +3,7 @@ name: create-execution-plan
 description: Cria execution plans otimizados para IA executar tarefas multi-etapas com suporte a mapeamento de codebase grande e execucao paralela via subagentes. Use quando receber pedido de planejamento, correcao de bug complexo, feature multi-etapas, refatoracao de codigo grande, ou qualquer tarefa que precise de plano antes de executar. Aplica automaticamente ao detectar /create-execution-plan.
 ---
 
-# Create Execution Plan v2.0
+# Create Execution Plan v3.0
 
 ## APLICACAO AUTOMATICA OBRIGATORIA
 
@@ -61,14 +61,10 @@ Resultado: mapa de dominios com lista de arquivos (SEM ler conteudo).
 
 **Passo 2 — Mapeamento profundo por dominio (subagentes paralelos)**
 
-Disparar ate 4 subagentes simultaneos via Task tool, cada um mapeando um dominio:
+Disparar ate 4 subagentes simultaneos, cada um mapeando um dominio:
 
 ```
-Task(subagent_type="explore", prompt="Mapeie src/services/: para cada arquivo, liste classes, funcoes publicas, dependencias entre modulos, e um resumo de 1 linha do proposito. NAO retorne codigo completo, apenas assinaturas e resumos.")
-
-Task(subagent_type="explore", prompt="Mapeie src/core/: ...")
-
-Task(subagent_type="explore", prompt="Mapeie src/api/: ...")
+Mapeie src/services/: para cada arquivo, liste classes, funcoes publicas, dependencias entre modulos, e um resumo de 1 linha do proposito. NAO retorne codigo completo, apenas assinaturas e resumos.
 ```
 
 Cada subagente retorna um **resumo compacto** (~50-100 linhas), nao o codigo inteiro.
@@ -121,7 +117,6 @@ Todo execution plan DEVE conter estas secoes, nesta ordem:
 Fase: [N ou Hotfix]
 Versao: 1.0
 Status: NAO INICIADO | EM ANDAMENTO | CONCLUIDO
-Modo de execucao: MANUAL | ORQUESTRADO | HIBRIDO
 Ultima atualizacao: YYYY-MM-DD
 Pre-requisitos: [lista ou "nenhum"]
 ```
@@ -255,25 +250,15 @@ Lista de itens verificaveis que confirmam conclusao:
 
 ---
 
-## Modos de Execucao
+## Execucao Orquestrada
 
-### Modo MANUAL (padrao)
-
-Uma tarefa por conversa. O usuario cola o prompt universal, a IA executa uma tarefa, commita, e o usuario abre nova conversa para a proxima.
-
-**Quando usar:** Tarefas que precisam de revisao humana entre etapas, ou quando o usuario quer controle fino.
-
-### Modo ORQUESTRADO (novo v2.0)
-
-A IA orquestradora dispara subagentes paralelos para blocos de tarefas independentes, tudo na mesma conversa do Cursor.
-
-**Quando usar:** Plano tem blocos paralelos claros, tarefas nao conflitam em arquivos, e o usuario quer velocidade.
+A IA orquestradora dispara subagentes paralelos para blocos de tarefas independentes, tudo na mesma conversa.
 
 **Como funciona:**
 
 ```
 1. IA orquestradora le o plano e identifica o proximo bloco
-2. Para blocos paralelos: dispara ate 4 subagentes via Task tool
+2. Para blocos paralelos: dispara ate 4 subagentes
 3. Cada subagente recebe prompt autocontido com:
    - Notas para IA da tarefa especifica
    - Notas globais do plano
@@ -282,10 +267,11 @@ A IA orquestradora dispara subagentes paralelos para blocos de tarefas independe
 5. Consolida resultados, resolve conflitos se houver
 6. Commita o bloco inteiro com mensagem descritiva
 7. Avanca para o proximo bloco
+8. Repete ate concluir todos os blocos do plano
 ```
 
-**Regras do modo orquestrado:**
-- Maximo 4 subagentes simultaneos (limite do Cursor)
+**Regras da execucao orquestrada:**
+- Maximo 4 subagentes simultaneos
 - Tarefas que conflitam em arquivo NUNCA rodam em paralelo
 - Subagentes NAO commitam — apenas o orquestrador commita
 - Se um subagente falhar, o orquestrador para e reporta
@@ -307,10 +293,6 @@ Regras:
 - Marque a tarefa como "concluido" no plano
 - Retorne: arquivos criados/alterados e resultado
 ```
-
-### Modo HIBRIDO
-
-Blocos paralelos executados em modo orquestrado, blocos sequenciais em modo manual. Util quando parte do plano precisa de revisao humana e parte pode ser automatizada.
 
 ---
 
@@ -337,74 +319,84 @@ Cada sub-plano segue o mesmo formato (cabecalho, tarefas, notas para IA, metrica
 
 ---
 
-## Prompt Universal (OBRIGATORIO)
+## Prompt de Execucao (OBRIGATORIO)
 
-Apos salvar o execution plan, SEMPRE gerar o arquivo de prompt universal.
+Apos salvar o execution plan, SEMPRE gerar o prompt de execucao.
 
-**Salvar em:** `docs/prompts_execucao_{nome_snake_case}.md`
-**Modelo de referencia:** `docs/prompts_execucao_saphiro.md` (se existir no projeto)
+**Salvar em:** `docs/04_operations/prompts_execucao_{NNN}_{nome_snake_case}.md` (mesmo numero do plano)
 
-### Estrutura obrigatoria
+### Principio
+
+O prompt de execucao e um **unico bloco de texto** que o usuario copia inteiro e cola numa conversa nova. A IA que recebe o prompt age como orquestradora: le o plano, identifica o proximo bloco pendente, dispara subagentes para tarefas paralelas, commita o bloco, e reporta o resultado.
+
+**Nao deve conter instrucoes para o humano.** Todo o texto e direcionado a IA orquestradora.
+
+### Estrutura obrigatoria do arquivo
 
 ```markdown
-# Prompts de Execucao — [Nome do Plano]
+# Prompt de Execucao — [Nome do Plano]
 
-> **Runbook operacional.** Copie, cole, execute, finalize.
+> Copiar TODO o conteudo abaixo e colar numa conversa nova.
 > Ultima atualizacao: YYYY-MM-DD
 
-## Como funciona
+---
 
-### Modo Manual (uma tarefa por conversa)
-1. Copie o PROMPT MANUAL
-2. Cole numa conversa nova
-3. A IA executa uma tarefa, commita, mostra resultado
-4. Nova conversa para a proxima tarefa
-
-### Modo Orquestrado (blocos paralelos automaticos)
-1. Copie o PROMPT ORQUESTRADO
-2. Cole numa conversa nova
-3. A IA dispara subagentes para o proximo bloco paralelo
-4. Ao concluir o bloco, commita tudo e mostra resultado
-5. Repita para o proximo bloco
-
-## PROMPT MANUAL (uma tarefa por conversa)
-
-[bloco de codigo com prompt autocontido]
-
-## PROMPT ORQUESTRADO (blocos paralelos)
-
-[bloco de codigo com prompt autocontido para orquestracao]
-
-## Tabela de tarefas
-## Ordem de execucao
-## Mapa de conflitos de arquivo
-## Exemplo pratico de fluxo
-## Estimativa
+[bloco unico de prompt — ver template abaixo]
 ```
 
-### Conteudo do prompt autocontido (ambos os modos)
+### Template do prompt unico
 
-O bloco DEVE incluir inline (sem depender de context-boot):
+O bloco DEVE conter, inline e autocontido (sem depender de context-boot):
 
-1. **Caminho do execution plan** — para a IA ler as Notas para IA da tarefa
-2. **Instrucao de identificacao** — encontrar proxima tarefa/bloco pendente
-3. **Caminhos do projeto** — workspace, referencias somente leitura
-4. **Contexto critico** — schema, logger, exceptions, convencoes obrigatorias
-5. **Contexto especifico do plano** — decisoes tecnicas, formatos de dados, regras de negocio, mapeamento de campos, constantes/IDs
-6. **Instrucoes pos-conclusao** — marcar concluido, commitar, push, mostrar resultado
+```
+Voce e a IA orquestradora. Seu trabalho e executar o proximo bloco pendente do execution plan.
 
-### Conteudo adicional do prompt orquestrado
+PLANO: {caminho_do_execution_plan}
+WORKSPACE: {caminho_do_workspace}
 
-Alem dos itens acima, o prompt orquestrado DEVE incluir:
+INSTRUCOES:
+1. Leia o execution plan completo
+2. Identifique o proximo bloco com tarefas "pendente"
+3. Para cada bloco:
+   a. Tarefas paralelas (marcadas com +): dispare subagentes via Task tool (max 4)
+   b. Tarefas sequenciais (marcadas com →): execute uma por vez
+   c. Tarefas que conflitam em arquivo: execute sequencialmente, NUNCA em paralelo
+4. Cada subagente recebe: Notas para IA da tarefa + Contexto global + regra de NAO commitar
+5. Apos todas as tarefas do bloco: commite com mensagem descritiva (feat:/fix:/docs:/refactor:)
+6. Marque cada tarefa como "concluido" no execution plan
+7. Reporte: tarefas concluidas, arquivos alterados, proximos blocos pendentes
 
-7. **Instrucao de paralelismo** — identificar bloco paralelo e disparar subagentes via Task tool
-8. **Template de prompt para subagente** — com placeholders para notas da tarefa
-9. **Regra de conflito** — tarefas que compartilham arquivo rodam sequencialmente
-10. **Regra de commit** — subagentes NAO commitam, orquestrador commita o bloco
+CONTEXTO DO PROJETO:
+{contexto_critico — schema, logger, exceptions, convencoes, IDs, restricoes}
+
+CONTEXTO DO PLANO:
+{decisoes_tecnicas, regras_de_negocio, mapeamento_de_campos, constantes}
+
+MAPA DE CONFLITOS:
+{tabela arquivo → tarefas}
+
+ORDEM DE EXECUCAO:
+{blocos com notacao + e →}
+
+REGRAS:
+- Ler "Notas para IA" de cada tarefa ANTES de executar
+- Subagentes NAO commitam — apenas o orquestrador commita
+- Se um subagente falhar, parar e reportar o erro
+- Responder em portugues (BR)
+- Ao concluir o bloco, informar quais blocos restam pendentes
+```
+
+### Regras do prompt de execucao
+
+- O prompt DEVE ser autocontido — colar numa conversa nova basta
+- Nao depender de context-boot ou context.md (incluir contexto inline)
+- Incluir convencoes especificas que impactam a execucao
+- Um bloco por conversa, um commit por bloco
+- O usuario copia o mesmo prompt para cada conversa; a IA identifica automaticamente o proximo bloco pendente
 
 ### Mapa de conflitos de arquivo
 
-Tabela que mostra quais tarefas tocam os mesmos arquivos:
+Tabela obrigatoria no prompt que mostra quais tarefas tocam os mesmos arquivos:
 
 ```markdown
 | Arquivo | Tarefas que alteram |
@@ -414,14 +406,6 @@ Tabela que mostra quais tarefas tocam os mesmos arquivos:
 ```
 
 Tarefas que aparecem na mesma linha NAO podem rodar em paralelo.
-
-### Regras do prompt universal
-
-- O prompt DEVE ser autocontido — colar numa conversa nova basta
-- Nao depender de context-boot ou context.md (incluir contexto inline)
-- Incluir convencoes especificas que impactam a execucao
-- Modo manual: uma tarefa por conversa, um commit por tarefa
-- Modo orquestrado: um bloco por conversa, um commit por bloco
 
 ---
 
@@ -450,13 +434,41 @@ Ao gerar o plano, referenciar skills aplicaveis nas Notas para IA:
 7. **Planejar tarefas** — T1..TN com Notas para IA detalhadas
 8. **Mapear conflitos** — quais tarefas tocam os mesmos arquivos?
 9. **Definir ordem** — grafo de dependencias + blocos paralelos
-10. **Escolher modo** — manual, orquestrado ou hibrido
-11. **Definir metricas** — como saber que deu certo
-12. **Definir rollback** — como reverter se der errado (quando aplicavel)
-13. **Salvar** — em `docs/00_overview/execution_plans/{nome}.md`
-14. **Gerar prompt universal** — em `docs/prompts_execucao_{nome}.md`
-15. **Apresentar ao usuario** — resumo + pedir confirmacao antes de executar
-16. **NAO executar sem confirmacao explicita**
+10. **Definir metricas** — como saber que deu certo
+11. **Definir rollback** — como reverter se der errado (quando aplicavel)
+12. **Salvar** — em `docs/00_overview/execution_plans/{NNN}_{nome}.md` (ver Regra de Numeracao abaixo)
+13. **Gerar prompt de execucao** — em `docs/04_operations/prompts_execucao_{NNN}_{nome}.md` (mesmo numero do plano)
+14. **Apresentar ao usuario** — resumo + pedir confirmacao antes de executar
+15. **NAO executar sem confirmacao explicita**
+
+---
+
+## Regra de Numeracao de Arquivos
+
+Todo execution plan e seu prompt de execucao DEVEM receber um numero sequencial de 3 digitos com zero-padding.
+
+### Como numerar
+
+1. Contar quantos arquivos `*.md` existem em `docs/00_overview/execution_plans/`
+2. Proximo numero = contagem + 1 (com zero-padding: `001`, `002`, ..., `010`, `011`, etc.)
+3. Usar o MESMO numero para o plano e para o prompt de execucao
+
+### Formato dos nomes
+
+```
+docs/00_overview/execution_plans/NNN_nome_snake_case.md
+docs/04_operations/prompts_execucao_NNN_nome_snake_case.md
+```
+
+### Exemplos
+
+```
+docs/00_overview/execution_plans/001_checkout_multi_meio.md
+docs/04_operations/prompts_execucao_001_checkout_multi_meio.md
+
+docs/00_overview/execution_plans/002_banking_basico.md
+docs/04_operations/prompts_execucao_002_banking_basico.md
+```
 
 ---
 
@@ -473,6 +485,9 @@ Ao gerar o plano, referenciar skills aplicaveis nas Notas para IA:
 - Snippets de codigo sem indicar onde inserir (antes/depois de qual bloco)
 - Tentar ler codebase inteiro sem Fase 0 (estoura contexto)
 - Subagentes paralelos editando o mesmo arquivo (conflito de escrita)
+- Prompt de execucao com instrucoes para o humano (deve ser 100% para a IA)
+- Prompt de execucao que depende de context-boot ou context.md externo
+- Multiplos blocos de prompt separados (deve ser um unico bloco copiavel)
 
 ---
 
@@ -480,5 +495,5 @@ Ao gerar o plano, referenciar skills aplicaveis nas Notas para IA:
 
 Plano sem contexto e promessa vazia.
 Tarefa sem "Notas para IA" e tarefa que vai falhar.
-Fase 0 economiza contexto. Modo orquestrado economiza tempo.
+Fase 0 economiza contexto. Execucao orquestrada economiza tempo.
 **Execution plan e contrato entre quem planeja e quem executa.**

@@ -3,7 +3,6 @@
 Fase: [N | Hotfix]
 Versao: 1.0
 Status: NAO INICIADO | EM ANDAMENTO | CONCLUIDO
-Modo de execucao: MANUAL | ORQUESTRADO | HIBRIDO
 Ultima atualizacao: YYYY-MM-DD
 Pre-requisitos: [lista ou "nenhum"]
 

@@ -1,6 +1,6 @@
 # create-execution-plan — Gerar Execution Plan Otimizado para IA
 
-Versao: 2.0
+Versao: 3.0
 Tipo: Command
 Uso: Manual (invocado pelo usuario)
 Escopo: Planejamento de tarefas multi-etapas, correcoes de bug, features, refatoracoes, mapeamento de codebase grande
@@ -9,7 +9,7 @@ Escopo: Planejamento de tarefas multi-etapas, correcoes de bug, features, refato
 
 ## Objetivo
 
-Gerar um execution plan estruturado e detalhado que qualquer IA consiga executar sem ambiguidade, com suporte a mapeamento de codebase grande (Fase 0) e execucao paralela via subagentes (modo orquestrado). O plano e salvo em `docs/00_overview/execution_plans/` com numeracao sequencial e segue o formato padrao da skill `create-execution-plan` v2.0.
+Gerar um execution plan estruturado e detalhado que qualquer IA consiga executar sem ambiguidade, com suporte a mapeamento de codebase grande (Fase 0) e execucao paralela via subagentes. O plano e salvo em `docs/00_overview/execution_plans/` e o prompt de execucao unico e salvo em `docs/04_operations/prompts_execucao_{NNN}_{nome}.md`.
 
 ---
 
@@ -23,14 +23,13 @@ Variantes:
 
 ```
 /create-execution-plan --map [descricao]     → Forca Fase 0 (mapeamento de codebase)
-/create-execution-plan --parallel [descricao] → Forca modo orquestrado
 ```
 
 ---
 
 ## Comportamento OBRIGATORIO
 
-Ao receber este comando, a IA DEVE aplicar a skill `create-execution-plan` v2.0 e seguir este fluxo:
+Ao receber este comando, a IA DEVE aplicar a skill `create-execution-plan` v3.0 e seguir este fluxo:
 
 ### 1. Avaliar escopo e decidir Fase 0
 
@@ -74,7 +73,7 @@ ANTES de planejar, a IA DEVE:
 
 Aplicar a skill `create-execution-plan` e gerar o documento com TODAS as secoes obrigatorias:
 
-1. Cabecalho (fase, versao, status, modo de execucao, pre-requisitos)
+1. Cabecalho (fase, versao, status, pre-requisitos)
 2. Objetivo (1-2 frases)
 3. Diagnostico/Contexto (com evidencias para bugs, mapa do codebase para refatoracoes)
 4. Decisoes tecnicas (tabela)
@@ -84,38 +83,26 @@ Aplicar a skill `create-execution-plan` e gerar o documento com TODAS as secoes 
 8. Metricas de sucesso (verificaveis)
 9. Rollback/Contingencia (quando aplicavel)
 
-### 6. Escolher modo de execucao
+### 6. Salvar e apresentar
 
-| Criterio | Modo |
-|----------|------|
-| Tarefas precisam de revisao humana entre etapas | MANUAL |
-| Blocos paralelos claros, sem conflito de arquivo | ORQUESTRADO |
-| Mix: parte precisa revisao, parte pode ser automatizada | HIBRIDO |
-| Flag `--parallel` presente | ORQUESTRADO |
-| Padrao (sem flag) | MANUAL |
-
-### 7. Salvar e apresentar
-
-- Determinar proximo numero sequencial: contar `.md` em `docs/00_overview/execution_plans/` + 1 (zero-padding de 3 digitos: `001`, `002`, etc.)
 - Salvar em `docs/00_overview/execution_plans/{NNN}_{nome_snake_case}.md`
 - Apresentar resumo ao usuario:
   - Tabela de tarefas com estimativas
   - Ordem de execucao (blocos paralelos destacados)
   - Mapa de conflitos de arquivo
-  - Modo de execucao escolhido
-- **PERGUNTAR:** "Posso executar o plano? Modo: [MANUAL/ORQUESTRADO/HIBRIDO]"
+- **PERGUNTAR:** "Posso gerar o prompt de execucao?"
 - **NAO executar sem confirmacao explicita**
 
-### 8. Gerar Prompt Universal de execucao
+### 7. Gerar Prompt de Execucao (unico, copiavel)
 
-APOS salvar o execution plan, gerar AUTOMATICAMENTE o arquivo de prompt universal:
+APOS salvar o execution plan, gerar AUTOMATICAMENTE o prompt de execucao:
 
-- Usar o MESMO numero do plano gerado acima
 - Salvar em `docs/04_operations/prompts_execucao_{NNN}_{nome_snake_case}.md`
-- Seguir o modelo de `docs/04_operations/prompts_execucao_saphiro.md` (se existir no projeto)
-- Incluir AMBOS os prompts: manual e orquestrado
-- Incluir mapa de conflitos de arquivo
-- Ver estrutura completa na skill `create-execution-plan` v2.0
+- O arquivo contem um **unico bloco de texto** que o usuario copia inteiro e cola numa conversa nova
+- O prompt e 100% direcionado a IA orquestradora (sem instrucoes para o humano)
+- Seguir o template da skill `create-execution-plan` v3.0 (secao "Prompt de Execucao")
+- Incluir inline: caminho do plano, workspace, contexto critico, mapa de conflitos, ordem de execucao
+- O mesmo prompt serve para todas as conversas — a IA identifica automaticamente o proximo bloco pendente
 
 ---
 
@@ -153,7 +140,7 @@ Este command pode ser combinado com:
 [usuario cola logs de erro]
 ```
 
-**Resultado:** Plano com diagnostico (mapa de campos faltando), tarefas com snippets exatos, ordem de execucao, metricas de sucesso. Salvo como `001_checkout_erros_pagamento.md`. Modo manual.
+**Resultado:** Plano com diagnostico (mapa de campos faltando), tarefas com snippets exatos, ordem de execucao, metricas de sucesso. Prompt unico gerado.
 
 ### Refatoracao de codebase grande
 
@@ -161,15 +148,15 @@ Este command pode ser combinado com:
 /create-execution-plan --map refatorar modulo de pagamentos para separar responsabilidades
 ```
 
-**Resultado:** Fase 0 ativada (mapeamento com subagentes), plano com mapa do codebase, tarefas com antes/depois, blocos paralelos. Salvo como `002_refatoracao_pagamentos.md`. Modo orquestrado.
+**Resultado:** Fase 0 ativada (mapeamento com subagentes), plano com mapa do codebase, tarefas com antes/depois, blocos paralelos. Prompt unico gerado.
 
-### Feature com execucao paralela
+### Feature multi-etapas
 
 ```
-/create-execution-plan --parallel implementar modulo de boletos com registro, consulta, cancelamento e impressao
+/create-execution-plan implementar modulo de boletos com registro, consulta, cancelamento e impressao
 ```
 
-**Resultado:** Plano com tarefas independentes em blocos paralelos, prompt orquestrado para subagentes. Salvo como `003_modulo_boletos.md`. Modo orquestrado.
+**Resultado:** Plano com tarefas independentes em blocos paralelos, prompt unico de orquestracao gerado.
 
 ---
 
@@ -177,7 +164,7 @@ Este command pode ser combinado com:
 
 Plano bom economiza horas de debug.
 Plano ruim gera retrabalho.
-Fase 0 economiza contexto. Modo orquestrado economiza tempo.
+Fase 0 economiza contexto. Execucao orquestrada economiza tempo.
 **Investir 10 minutos no plano salva 2 horas na execucao.**
 
 --- End Command ---
