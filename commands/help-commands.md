@@ -1,6 +1,6 @@
 # /help-commands
 
-Guia de referencia rapida dos 11 commands ativos do AI Coding Toolkit v5.0.
+Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
 
 ---
 
@@ -69,6 +69,15 @@ Guia de referencia rapida dos 11 commands ativos do AI Coding Toolkit v5.0.
 
 ---
 
+### /optimize-context
+**O que faz:** Compacta `context.md` movendo conteudo historico para `context_history.md` — reduz consumo de tokens em toda interacao.
+
+**Quando usar:** Quando context.md ultrapassar 300 linhas, apos concluir fase/plano grande, ou quando sessoes estiverem lentas por excesso de contexto.
+
+**Quando o Cursor falha sem ele:** context.md cresce indefinidamente, cada sessao consome milhares de tokens em informacao historica irrelevante para a tarefa atual.
+
+---
+
 ## Comandos Situacionais (menos frequentes)
 
 ### /architecture-review
@@ -115,6 +124,7 @@ Guia de referencia rapida dos 11 commands ativos do AI Coding Toolkit v5.0.
 | `/update-context` | Frequente | Fim de etapa / sessao |
 | `/create-execution-plan` | Moderado | Tarefas com 3+ etapas |
 | `/decision-needed` | Moderado | Bifurcacoes tecnicas |
+| `/optimize-context` | Moderado | context.md > 300 linhas |
 | `/checkpoint-and-branch` | Moderado | Antes de mudancas estruturais |
 | `/architecture-review` | Mensal | Auditoria proativa |
 | `/decision-report` | Ocasional | Decisoes com rastreabilidade |

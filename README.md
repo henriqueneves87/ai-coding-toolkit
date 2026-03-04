@@ -8,7 +8,7 @@ Coleção de **skills**, **commands**, **agents** e **rules** para Cursor, Winds
 
 ## O que está incluído
 
-### Skills (8 ativos + 5 infra)
+### Skills (9 ativos + 5 infra)
 
 | Skill | Tipo | Ativa quando |
 |-------|------|-------------|
@@ -20,6 +20,7 @@ Coleção de **skills**, **commands**, **agents** e **rules** para Cursor, Winds
 | `create-documentation` | Ativo | Criação/atualização de docs |
 | `create-execution-plan` | Ativo | Planejamento multi-etapas |
 | `frontend-conventions` | Ativo | UI/UX em React/Next.js |
+| `optimize-context` | Ativo | context.md > 300 linhas ou `/optimize-context` |
 | `create-rule` | Infra ⚙️ | Criação de rules do Cursor |
 | `create-skill` | Infra ⚙️ | Criação de Agent Skills |
 | `create-subagent` | Infra ⚙️ | Criação de subagentes |
@@ -28,7 +29,7 @@ Coleção de **skills**, **commands**, **agents** e **rules** para Cursor, Winds
 
 > Skills **Infra** são utilitários do toolkit. Skills **Ativos** disparam automaticamente por contexto.
 
-### Commands (11)
+### Commands (12)
 
 **Essenciais (uso diário):**
 
@@ -40,6 +41,7 @@ Coleção de **skills**, **commands**, **agents** e **rules** para Cursor, Winds
 | `/update-context` | Atualiza context.md com avanço real do projeto |
 | `/create-execution-plan` | Plano multi-etapas com dependências e critérios de aceite |
 | `/decision-needed` | Apresenta trade-offs e força decisão humana documentada |
+| `/optimize-context` | Compacta context.md, arquiva histórico em context_history.md |
 | `/checkpoint-and-branch` | Cria branch de backup antes de mudança arriscada |
 
 **Situacionais:**
@@ -191,7 +193,7 @@ ai-coding-toolkit/
 ├── install.sh               # Instalador Linux/Mac (Cursor)
 ├── docs/
 │   └── manual.md            # Documentação completa
-├── skills/                  # 8 ativos + 5 infra
+├── skills/                  # 9 ativos + 5 infra
 │   ├── code-with-logs/
 │   ├── create-subagents/
 │   ├── error-handling-patterns/
@@ -200,12 +202,13 @@ ai-coding-toolkit/
 │   ├── create-documentation/
 │   ├── create-execution-plan/
 │   ├── frontend-conventions/
+│   ├── optimize-context/
 │   ├── create-rule/         # infra
 │   ├── create-skill/        # infra
 │   ├── create-subagent/     # infra
 │   ├── migrate-to-skills/   # infra
 │   └── update-cursor-settings/ # infra
-├── commands/                # 11 commands
+├── commands/                # 12 commands
 │   ├── project-init.md
 │   ├── context-boot.md
 │   ├── apply-conventions.md
@@ -215,6 +218,7 @@ ai-coding-toolkit/
 │   ├── checkpoint-and-branch.md
 │   ├── architecture-review.md
 │   ├── decision-report.md
+│   ├── optimize-context.md
 │   ├── summarize-session.md
 │   └── help-commands.md
 ├── agents/                  # 8 agents

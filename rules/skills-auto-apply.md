@@ -15,6 +15,7 @@ alwaysApply: true
 | Commits, branches, PRs | `git-workflow` |
 | UI/UX em React/Next.js | `frontend-conventions` |
 | Planejamento ou tarefa multi-etapas | `create-execution-plan` |
+| context.md > 300 linhas ou `/optimize-context` | `optimize-context` |
 
 # Agents Disponíveis
 

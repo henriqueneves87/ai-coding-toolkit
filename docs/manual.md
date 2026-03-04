@@ -182,6 +182,15 @@ Restrição: Budget limitado, sem infra extra
 Motivo: Refatorar camada de acesso ao banco de dados
 ```
 
+### /optimize-context
+**O que faz:** Compacta context.md movendo histórico para context_history.md
+**Quando usar:** context.md > 300 linhas, após concluir fase grande, sessões lentas por excesso de tokens
+**Quando a IA falha sem ele:** context.md cresce indefinidamente, consumindo tokens em toda interação
+
+```
+/optimize-context
+```
+
 ### Comandos situacionais
 
 | Comando | O que faz | Quando usar |
@@ -197,7 +206,7 @@ Motivo: Refatorar camada de acesso ao banco de dados
 
 O toolkit tem **skills** e **agents** que a IA aplica sozinha quando detecta o contexto certo. Você não precisa invocar — eles ativam automaticamente.
 
-### Skills (8 ativos)
+### Skills (9 ativos)
 
 | Skill | Ativa quando | O que faz |
 |-------|-------------|-----------|
@@ -209,6 +218,7 @@ O toolkit tem **skills** e **agents** que a IA aplica sozinha quando detecta o c
 | `create-documentation` | Criação/atualização de docs | Estrutura organizada, anti-dumping |
 | `create-execution-plan` | Planejamento multi-etapas | Plano com dependências, blocos paralelos, critérios de aceite |
 | `frontend-conventions` | UI/UX em React/Next.js | Tokens semânticos, feedback (toast/skeleton/empty), a11y |
+| `optimize-context` | context.md > 300 linhas | Compacta context.md, arquiva histórico em context_history.md |
 
 ### Agents (8 disponíveis)
 
@@ -358,6 +368,7 @@ Sem enforcement: IA gera, você aceita, erros acumulam. Com enforcement: pre-com
 | `/update-context` | Registrar avanço real | Após cada entrega |
 | `/create-execution-plan` | Planejar tarefa complexa | Tarefas 3+ etapas |
 | `/decision-needed` | Forçar decisão humana | Trade-offs importantes |
+| `/optimize-context` | Compactar context.md (economia de tokens) | context.md > 300 linhas |
 | `/checkpoint-and-branch` | Backup antes de mudança arriscada | Refatorações grandes |
 | `/architecture-review` | Auditoria do projeto | Mensal |
 | `/decision-report` | Relatório técnico formal | Decisões importantes |
@@ -376,6 +387,7 @@ Sem enforcement: IA gera, você aceita, erros acumulam. Com enforcement: pre-com
 | `create-documentation` | Docs |
 | `create-execution-plan` | Planejamento multi-etapas |
 | `frontend-conventions` | UI/UX React/Next.js |
+| `optimize-context` | context.md > 300 linhas |
 
 ### Agents (automáticos)
 
