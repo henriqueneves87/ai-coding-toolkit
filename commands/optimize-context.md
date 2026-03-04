@@ -1,3 +1,8 @@
+---
+name: optimize-context
+description: Compacta context.md para economia de tokens (arquiva histórico, compacta seções).
+---
+
 # optimize-context — Compactar context.md para Economia de Tokens
 
 Versão: 1.0

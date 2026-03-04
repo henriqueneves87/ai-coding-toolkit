@@ -1,3 +1,8 @@
+---
+name: project-init
+description: Bootstrap de projeto novo — context.md, roadmap.md, estrutura completa de docs.
+---
+
 # /project-init — Bootstrap de Projeto Novo
 
 Versão: 1.0

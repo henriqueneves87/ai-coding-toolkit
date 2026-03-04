@@ -1,3 +1,8 @@
+---
+name: summarize-session
+description: Resumo de sessão e sugestão de próximos passos para continuidade.
+---
+
 # summarize-session — Resumo de Sessão de Trabalho
 
 Versão: 1.0  

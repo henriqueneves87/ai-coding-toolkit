@@ -1,3 +1,8 @@
+---
+name: checkpoint-and-branch
+description: Cria branch de backup antes de mudança arriscada (checkpoint + branch dedicado).
+---
+
 # checkpoint-and-branch
 
 ## CHECKPOINT SEGURO + BRANCH DEDICADO (HARD STOP)

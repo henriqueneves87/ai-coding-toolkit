@@ -1,3 +1,8 @@
+---
+name: create-execution-plan
+description: Gera execution plan multi-etapas com mapeamento de codebase e subagentes.
+---
+
 # create-execution-plan — Gerar Execution Plan Otimizado para IA
 
 Versao: 3.0

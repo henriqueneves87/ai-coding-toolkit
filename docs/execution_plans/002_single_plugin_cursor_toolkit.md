@@ -99,7 +99,7 @@ Migrar o cursor-toolkit para o formato de single plugin do Cursor, permitindo us
 - **Arquivos:** `rules/ai-conventions-compact.md`, `rules/skills-auto-apply.md`, `rules/project-specific-template.md`
 - **Depende de:** nenhuma
 - **Conflita com:** nenhuma
-- **Status:** pendente
+- **Status:** concluído
 - **Critério de aceite:** Todos os rules têm frontmatter com `description`; compatibilidade com formato plugin confirmada
 - **Notas para IA:**
 
@@ -119,7 +119,7 @@ Migrar o cursor-toolkit para o formato de single plugin do Cursor, permitindo us
 - **Arquivos:** `commands/*.md` (11 arquivos)
 - **Depende de:** nenhuma
 - **Conflita com:** nenhuma
-- **Status:** pendente
+- **Status:** concluído
 - **Critério de aceite:** Cada command tem frontmatter com `name` e `description`
 - **Notas para IA:**
 
@@ -144,7 +144,7 @@ Migrar o cursor-toolkit para o formato de single plugin do Cursor, permitindo us
 - **Arquivos:** `assets/` (pasta se não existir), `assets/logo.svg`
 - **Depende de:** T1 (plugin.json referencia logo)
 - **Conflita com:** nenhuma
-- **Status:** pendente
+- **Status:** concluído
 - **Critério de aceite:** Logo existe ou chave "logo" removida de plugin.json
 - **Notas para IA:**
 

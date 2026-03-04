@@ -1,3 +1,8 @@
+---
+name: help-commands
+description: Lista todos os comandos com exemplos de uso.
+---
+
 # /help-commands
 
 Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.

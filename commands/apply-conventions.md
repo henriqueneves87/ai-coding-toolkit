@@ -1,3 +1,8 @@
+---
+name: apply-conventions
+description: Checklist pré-geração: logs, erros, plano, skills aplicáveis.
+---
+
 # apply-conventions — Checklist Obrigatório ANTES de Gerar Código
 
 Versão: 2.0 (Generic)  

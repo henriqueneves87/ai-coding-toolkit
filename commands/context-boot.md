@@ -1,3 +1,8 @@
+---
+name: context-boot
+description: Carrega contexto mínimo do projeto para ancoragem rápida da IA (<=500 tokens).
+---
+
 # context-boot — Context Engineering BOOT
 
 Carrega contexto mínimo do projeto para ancoragem rápida da IA.

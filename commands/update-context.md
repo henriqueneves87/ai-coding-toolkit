@@ -1,3 +1,8 @@
+---
+name: update-context
+description: Atualiza context.md com política de compactação e síntese.
+---
+
 # update-context — Compact & Progressive Memory Engine
 
 Atualiza a memória longa do projeto sem gerar dumping,

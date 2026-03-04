@@ -1,4 +1,7 @@
-# decision-needed
+---
+name: decision-needed
+description: Apresenta trade-offs e força decisão humana documentada.
+---
 
 # decision-needed — DECISAO TECNICA NECESSARIA
 

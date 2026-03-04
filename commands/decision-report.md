@@ -1,4 +1,7 @@
-# decision-report
+---
+name: decision-report
+description: Relatório técnico versionado (DR_XXX) para tomada de decisão.
+---
 
 # decision-report — RELATÓRIO TÉCNICO VERSIONADO EM MARKDOWN
 

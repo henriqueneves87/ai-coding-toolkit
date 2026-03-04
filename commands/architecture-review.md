@@ -1,3 +1,8 @@
+---
+name: architecture-review
+description: Auditoria DRY-RUN do projeto — mapeia entropia, propõe reorganização (não altera código).
+---
+
 # architecture-review — AUDITORIA + REORGANIZAÇÃO GOVERNADA DO PROJETO (HARD STOP)
 
 Versão: 1.2  
