@@ -1,6 +1,6 @@
 ---
 name: update-context
-description: Atualiza context.md com política de compactação e síntese.
+description: Atualiza context.md e seção "Estado atual" do AGENTS.md com política de compactação e síntese.
 ---
 
 # update-context — Compact & Progressive Memory Engine
@@ -33,6 +33,9 @@ Resumo → context.md
 ---
 
 ## Arquivos Canônicos
+
+- **Camada estável (lida automaticamente pelo Cursor):**
+  `AGENTS.md` (raiz do projeto)
 
 - **Índice executivo:**
   `docs/00_overview/context.md`
@@ -134,6 +137,23 @@ Aplicar apenas:
 4. Próximo Passo (se mudou)
 
 **Nunca atualizar tudo.**
+
+### Fase 3.1 — Sincronizar AGENTS.md (se existir)
+
+Se `AGENTS.md` existir na raiz do projeto, atualizar **apenas** a seção "Estado atual":
+
+```markdown
+## Estado atual
+
+Fase: [fase atual]
+Foco: [foco atual — 1 linha]
+```
+
+Regras:
+- Máximo 2-3 linhas
+- Só atualizar se fase ou foco mudaram
+- Não duplicar conteúdo do context.md
+- Se AGENTS.md não existir, ignorar (não criar)
 
 ### Fase 4 — Criar/Referenciar Documento Completo
 

@@ -80,16 +80,9 @@ Coleção de **skills**, **commands**, **agents** e **rules** para Cursor, Winds
 
 ### Cursor
 
-O repositório segue o formato **single plugin** do Cursor. Duas formas de uso:
+O repositório segue o formato **single plugin** (`.cursor-plugin/plugin.json`) do Cursor. Hoje a UI de Plugins exibe apenas o Marketplace — não há opção para adicionar repositório local como usuário individual. Use a instalação via symlinks:
 
-**Uso como plugin Cursor (recomendado)**  
-1. Clone o repositório
-2. Cursor Settings → Plugins → Adicionar repositório local → aponte para a pasta do clone
-3. O Cursor carregará skills, commands, agents e rules automaticamente
-
-Referência: [cursor/plugin-template](https://github.com/cursor/plugin-template) (formato single plugin, sem marketplace)
-
-**Instalação via symlinks (alternativa):**
+**Instalação via symlinks (recomendado):**
 
 ```bash
 git clone https://github.com/henriqueneves87/ai-coding-toolkit.git

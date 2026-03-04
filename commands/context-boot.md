@@ -5,7 +5,7 @@ description: Carrega contexto mínimo do projeto para ancoragem rápida da IA (<
 
 # context-boot — Context Engineering BOOT
 
-Carrega contexto mínimo do projeto para ancoragem rápida da IA.
+Carrega contexto dinâmico do projeto para ancoragem rápida da IA.
 
 ---
 
@@ -19,29 +19,32 @@ Carrega contexto mínimo do projeto para ancoragem rápida da IA.
 
 ## Objetivo
 
-Alinhar IA ao projeto com custo mínimo de tokens (<=500 tokens).
+Alinhar IA ao estado atual do projeto com custo mínimo de tokens (<=500 tokens).
+
+A parte estável (stack, convenções, estrutura) é lida automaticamente pelo Cursor via `AGENTS.md`.
+Este command foca na **camada dinâmica**: estado atual, decisões recentes, tarefas pendentes.
 
 ---
 
 ## Comportamento
 
-### 1. Ler Project Overlay (se existir)
+### 1. Verificar AGENTS.md (raiz)
+
+- Se `AGENTS.md` existir: a IA já tem stack, convenções e estrutura. **Não repetir.**
+- Se não existir: incluir stack e convenções no Context Pack (fallback).
+
+### 2. Ler contexto dinâmico
 
 - `docs/00_overview/context.md` ou `docs/00_overview/context_core.md` (prioridade máxima)
-- `docs/docs_index.md` (apenas para mapear estrutura)
+- Focar em: Estado do Sistema, Decisões recentes, Próximo Passo, Riscos
 - Se não existir, usar fallback de descoberta mínima
 
-### 2. Fallback (se não houver docs)
+### 3. Fallback (se não houver docs nem AGENTS.md)
 
 - Listar estrutura de diretórios principais
 - Localizar pontos de entrada (main.py, index.js, app.py, etc.)
 - Identificar arquivos de configuração (package.json, requirements.txt, etc.)
 - Mapear dependências principais
-
-### 3. Ler Arquitetura (se existir)
-
-- `docs/01_architecture/summary.md` ou `architecture.md` (apenas primeiras 20 linhas)
-- `docs/02_business_rules/core.md` ou `rules.md` (apenas primeiras 20 linhas)
 
 ### 4. Gerar Context Pack BOOT
 
@@ -98,8 +101,18 @@ Após gerar Context Pack, perguntar:
 
 - Não fazer dump de conteúdo completo
 - Priorizar síntese sobre volume
+- Se AGENTS.md existir, não repetir stack/convenções no Context Pack
 - Usar Project Overlay quando disponível
-- Fallback para descoberta mínima se não houver docs
+- Fallback para descoberta mínima se não houver docs nem AGENTS.md
+
+---
+
+## Camadas de contexto
+
+| Camada | Arquivo | Quem lê | Frequência |
+|--------|---------|---------|------------|
+| Estável | `AGENTS.md` | Cursor (automático) | Raramente muda |
+| Dinâmica | `context.md` | `/context-boot` (manual) | A cada sessão |
 
 ---
 
@@ -107,3 +120,4 @@ Após gerar Context Pack, perguntar:
 
 - `context-focus` — próximo nível de profundidade
 - `context-deep` — leitura cirúrgica de arquivos específicos
+- `update-context` — atualiza context.md e sincroniza AGENTS.md

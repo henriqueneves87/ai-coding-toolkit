@@ -1,6 +1,6 @@
 ---
 name: project-init
-description: Bootstrap de projeto novo — context.md, roadmap.md, estrutura completa de docs.
+description: Bootstrap de projeto novo — AGENTS.md, context.md, roadmap.md, estrutura completa de docs.
 ---
 
 # /project-init — Bootstrap de Projeto Novo
@@ -15,7 +15,7 @@ Depende de: nenhuma
 
 ## Objetivo
 
-Inicializar a estrutura de documentação padronizada do projeto: pastas numeradas, `context.md`, `roadmap.md` e arquivos de arquitetura. Após executar, o projeto estará pronto para usar `/create-execution-plan` e manter contexto vivo.
+Inicializar a estrutura de documentação padronizada do projeto: `AGENTS.md` na raiz, pastas numeradas, `context.md`, `roadmap.md` e arquivos de arquitetura. Após executar, o projeto estará pronto para usar `/create-execution-plan` e manter contexto vivo.
 
 ---
 
@@ -33,7 +33,49 @@ Se o usuário já forneceu essas informações no prompt, usar diretamente sem p
 
 ---
 
-## Passo 2 — Criar estrutura de pastas
+## Passo 2 — Criar AGENTS.md na raiz do projeto
+
+O Cursor lê `AGENTS.md` automaticamente ao abrir o Agent (Cmd+I / Ctrl+I).
+Este arquivo é a **camada estável** do contexto: o que o projeto é, stack e convenções.
+A camada dinâmica (estado atual, decisões recentes) fica em `context.md`.
+
+```markdown
+# [Nome do Projeto]
+
+[Objetivo em 1-2 frases]
+
+## Stack
+
+- [tecnologia 1]
+- [tecnologia 2]
+
+## Convenções
+
+- Idioma das respostas: pt-BR
+- Idioma do código: inglês
+- Commits: `feat:`, `fix:`, `docs:`, `refactor:` (imperativo, sem ponto final)
+- Keys: nunca em código, sempre em .env
+
+## Estrutura
+
+[Breve descrição dos diretórios principais do projeto]
+
+## Estado atual
+
+Fase: [fase atual]
+Foco: [o que está sendo trabalhado agora]
+
+## Contexto detalhado
+
+Para estado atual, decisões e tarefas pendentes: `docs/00_overview/context.md`
+Para roadmap: `docs/00_overview/roadmap.md`
+```
+
+Preencher com dados do Passo 1. A seção "Estado atual" deve ter no máximo 2-3 linhas.
+
+---
+
+## Passo 3 — Criar estrutura de pastas
 
 Criar as seguintes pastas em `docs/`:
 
@@ -56,7 +98,7 @@ Criar `.gitkeep` nas pastas vazias para garantir versionamento.
 
 ---
 
-## Passo 3 — Criar docs/00_overview/context.md
+## Passo 4 — Criar docs/00_overview/context.md
 
 Estrutura canônica obrigatória:
 
@@ -127,7 +169,7 @@ Command: /update-context
 
 ---
 
-## Passo 4 — Criar docs/00_overview/roadmap.md
+## Passo 5 — Criar docs/00_overview/roadmap.md
 
 Estrutura obrigatória:
 
@@ -168,7 +210,7 @@ Estrutura obrigatória:
 
 ---
 
-## Passo 5 — Criar arquivos de arquitetura em docs/01_architecture/
+## Passo 6 — Criar arquivos de arquitetura em docs/01_architecture/
 
 ### overview.md
 
@@ -229,7 +271,7 @@ Estrutura obrigatória:
 
 ---
 
-## Passo 6 — Preencher com dados reais
+## Passo 7 — Preencher com dados reais
 
 Substituir todos os placeholders `[...]` com as informações coletadas no Passo 1.
 
@@ -240,10 +282,11 @@ Regras:
 
 ---
 
-## Passo 7 — Validação final
+## Passo 8 — Validação final
 
-Confirmar os 7 itens antes de encerrar:
+Confirmar os 8 itens antes de encerrar:
 
+- [ ] `AGENTS.md` criado na raiz e preenchido
 - [ ] `docs/00_overview/context.md` criado e preenchido
 - [ ] `docs/00_overview/roadmap.md` criado com ao menos 2 fases
 - [ ] `docs/01_architecture/overview.md` criado

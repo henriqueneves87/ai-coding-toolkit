@@ -12,7 +12,7 @@ Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
 ## Comandos Essenciais (uso frequente)
 
 ### /project-init
-**O que faz:** Bootstrap completo de projeto novo — cria `docs/00_overview/context.md`, `roadmap.md`, toda a arvore de pastas numeradas (`00_overview/` ate `07_changelog/`, `_scratchpad/`, `execution_plans/`) e arquivos de arquitetura.
+**O que faz:** Bootstrap completo de projeto novo — cria `AGENTS.md` na raiz, `docs/00_overview/context.md`, `roadmap.md`, toda a arvore de pastas numeradas (`00_overview/` ate `07_changelog/`, `_scratchpad/`, `execution_plans/`) e arquivos de arquitetura.
 
 **Quando usar:** Inicio de qualquer projeto novo ou quando o projeto carece de estrutura documental.
 
@@ -21,7 +21,7 @@ Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
 ---
 
 ### /context-boot
-**O que faz:** Carrega o contexto minimo do projeto no inicio da sessao — le `context.md`, `roadmap.md` e lista de tarefas pendentes. Orienta a IA sobre o estado atual sem desperdicar tokens.
+**O que faz:** Carrega o contexto dinamico do projeto no inicio da sessao — le `context.md` (estado, decisoes, proximos passos). A parte estavel (stack, convencoes) ja e lida automaticamente pelo Cursor via `AGENTS.md`.
 
 **Quando usar:** Inicio de toda sessao de trabalho.
 
@@ -39,7 +39,7 @@ Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
 ---
 
 ### /update-context
-**O que faz:** Atualiza `docs/00_overview/context.md` com o avanco real da sessao — decisoes tomadas, estado do sistema, proximo passo.
+**O que faz:** Atualiza `docs/00_overview/context.md` com o avanco real da sessao — decisoes tomadas, estado do sistema, proximo passo. Tambem sincroniza a secao "Estado atual" do `AGENTS.md` se fase ou foco mudaram.
 
 **Quando usar:** Ao concluir uma etapa relevante ou ao final da sessao.
 
@@ -135,6 +135,19 @@ Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
 | `/decision-report` | Ocasional | Decisoes com rastreabilidade |
 | `/summarize-session` | Ocasional | Encerramento de sessao longa |
 | `/help-commands` | Ocasional | Referencia |
+
+---
+
+## AGENTS.md vs context.md
+
+| | AGENTS.md | context.md |
+|---|-----------|------------|
+| **Onde** | Raiz do projeto | `docs/00_overview/context.md` |
+| **Funcao** | Camada estavel: stack, convencoes, estrutura | Camada dinamica: estado, decisoes, proximos passos |
+| **Quem le** | Cursor (automatico, via Agent) | `/context-boot` (manual, inicio de sessao) |
+| **Atualizacao** | Raro — quando fase/foco mudam (`/update-context`) | Frequente — a cada sessao (`/update-context`) |
+
+**Fluxo:** AGENTS.md (automatico) + `/context-boot` (manual) = contexto completo.
 
 ---
 
