@@ -3,7 +3,7 @@ name: create-execution-plan
 description: Cria execution plans otimizados para IA executar tarefas multi-etapas com suporte a mapeamento de codebase grande e execucao paralela via subagentes. Use quando receber pedido de planejamento, correcao de bug complexo, feature multi-etapas, refatoracao de codigo grande, ou qualquer tarefa que precise de plano antes de executar. Aplica automaticamente ao detectar /create-execution-plan.
 ---
 
-# Create Execution Plan v2.0
+# Create Execution Plan v3.0 (orquestrado only)
 
 ## APLICACAO AUTOMATICA OBRIGATORIA
 
@@ -15,7 +15,6 @@ description: Cria execution plans otimizados para IA executar tarefas multi-etap
 - Tarefa que envolve backend + frontend + banco
 - Refatoracao de codebase grande (>500 linhas ou >10 arquivos)
 - Comando `/create-execution-plan`
-- Contexto de `/governed-task` que requer planejamento
 
 ## Quando NAO usar
 
@@ -121,7 +120,7 @@ Todo execution plan DEVE conter estas secoes, nesta ordem:
 Fase: [N ou Hotfix]
 Versao: 1.0
 Status: NAO INICIADO | EM ANDAMENTO | CONCLUIDO
-Modo de execucao: MANUAL | ORQUESTRADO | HIBRIDO
+Modo de execucao: ORQUESTRADO (fixo)
 Ultima atualizacao: YYYY-MM-DD
 Pre-requisitos: [lista ou "nenhum"]
 ```
@@ -255,19 +254,9 @@ Lista de itens verificaveis que confirmam conclusao:
 
 ---
 
-## Modos de Execucao
+## Modo de Execucao: ORQUESTRADO (unico)
 
-### Modo MANUAL (padrao)
-
-Uma tarefa por conversa. O usuario cola o prompt universal, a IA executa uma tarefa, commita, e o usuario abre nova conversa para a proxima.
-
-**Quando usar:** Tarefas que precisam de revisao humana entre etapas, ou quando o usuario quer controle fino.
-
-### Modo ORQUESTRADO (novo v2.0)
-
-A IA orquestradora dispara subagentes paralelos para blocos de tarefas independentes, tudo na mesma conversa do Cursor.
-
-**Quando usar:** Plano tem blocos paralelos claros, tarefas nao conflitam em arquivos, e o usuario quer velocidade.
+A IA orquestradora dispara subagentes paralelos para blocos de tarefas independentes, tudo na mesma conversa do Cursor. Nao ha modo manual nem hibrido — sempre orquestrado.
 
 **Como funciona:**
 
@@ -308,10 +297,6 @@ Regras:
 - Retorne: arquivos criados/alterados e resultado
 ```
 
-### Modo HIBRIDO
-
-Blocos paralelos executados em modo orquestrado, blocos sequenciais em modo manual. Util quando parte do plano precisa de revisao humana e parte pode ser automatizada.
-
 ---
 
 ## Sub-planos
@@ -337,52 +322,35 @@ Cada sub-plano segue o mesmo formato (cabecalho, tarefas, notas para IA, metrica
 
 ---
 
-## Prompt Universal (OBRIGATORIO)
+## Prompt de Execucao (OBRIGATORIO — orquestrado only)
 
-Apos salvar o execution plan, SEMPRE gerar o arquivo de prompt universal.
+Apos salvar o execution plan, SEMPRE gerar o arquivo de prompt de execucao.
 
 **Salvar em:** `docs/04_operations/prompts_execucao_{NNN}_{nome_snake_case}.md` (mesmo numero do plano)
-**Modelo de referencia:** `docs/04_operations/prompts_execucao_saphiro.md` (se existir no projeto)
 
 ### Estrutura obrigatoria
+
+O arquivo contem um **unico bloco de texto** copiavel. Nao ha prompt manual — apenas orquestrado.
 
 ```markdown
 # Prompts de Execucao — [Nome do Plano]
 
-> **Runbook operacional.** Copie, cole, execute, finalize.
+> **Runbook operacional.** Copie o bloco abaixo inteiro, cole numa conversa nova, execute.
 > Ultima atualizacao: YYYY-MM-DD
 
-## Como funciona
+## PROMPT ORQUESTRADO (copie e cole)
 
-### Modo Manual (uma tarefa por conversa)
-1. Copie o PROMPT MANUAL
-2. Cole numa conversa nova
-3. A IA executa uma tarefa, commita, mostra resultado
-4. Nova conversa para a proxima tarefa
-
-### Modo Orquestrado (blocos paralelos automaticos)
-1. Copie o PROMPT ORQUESTRADO
-2. Cole numa conversa nova
-3. A IA dispara subagentes para o proximo bloco paralelo
-4. Ao concluir o bloco, commita tudo e mostra resultado
-5. Repita para o proximo bloco
-
-## PROMPT MANUAL (uma tarefa por conversa)
-
-[bloco de codigo com prompt autocontido]
-
-## PROMPT ORQUESTRADO (blocos paralelos)
-
-[bloco de codigo com prompt autocontido para orquestracao]
+```
+[bloco de codigo — prompt 100% direcionado a IA orquestradora]
+```
 
 ## Tabela de tarefas
 ## Ordem de execucao
 ## Mapa de conflitos de arquivo
-## Exemplo pratico de fluxo
 ## Estimativa
 ```
 
-### Conteudo do prompt autocontido (ambos os modos)
+### Conteudo do prompt (obrigatorio)
 
 O bloco DEVE incluir inline (sem depender de context-boot):
 
@@ -392,11 +360,6 @@ O bloco DEVE incluir inline (sem depender de context-boot):
 4. **Contexto critico** — schema, logger, exceptions, convencoes obrigatorias
 5. **Contexto especifico do plano** — decisoes tecnicas, formatos de dados, regras de negocio, mapeamento de campos, constantes/IDs
 6. **Instrucoes pos-conclusao** — marcar concluido, commitar, push, mostrar resultado
-
-### Conteudo adicional do prompt orquestrado
-
-Alem dos itens acima, o prompt orquestrado DEVE incluir:
-
 7. **Instrucao de paralelismo** — identificar bloco paralelo e disparar subagentes via Task tool
 8. **Template de prompt para subagente** — com placeholders para notas da tarefa
 9. **Regra de conflito** — tarefas que compartilham arquivo rodam sequencialmente
@@ -415,13 +378,12 @@ Tabela que mostra quais tarefas tocam os mesmos arquivos:
 
 Tarefas que aparecem na mesma linha NAO podem rodar em paralelo.
 
-### Regras do prompt universal
+### Regras do prompt de execucao
 
 - O prompt DEVE ser autocontido — colar numa conversa nova basta
 - Nao depender de context-boot ou context.md (incluir contexto inline)
 - Incluir convencoes especificas que impactam a execucao
-- Modo manual: uma tarefa por conversa, um commit por tarefa
-- Modo orquestrado: um bloco por conversa, um commit por bloco
+- Um bloco por conversa, um commit por bloco (orquestrador commita)
 
 ---
 
@@ -450,13 +412,12 @@ Ao gerar o plano, referenciar skills aplicaveis nas Notas para IA:
 7. **Planejar tarefas** — T1..TN com Notas para IA detalhadas
 8. **Mapear conflitos** — quais tarefas tocam os mesmos arquivos?
 9. **Definir ordem** — grafo de dependencias + blocos paralelos
-10. **Escolher modo** — manual, orquestrado ou hibrido
-11. **Definir metricas** — como saber que deu certo
-12. **Definir rollback** — como reverter se der errado (quando aplicavel)
-13. **Salvar** — em `docs/00_overview/execution_plans/{NNN}_{nome}.md` (ver Regra de Numeracao abaixo)
-14. **Gerar prompt universal** — em `docs/04_operations/prompts_execucao_{NNN}_{nome}.md` (mesmo numero do plano)
-15. **Apresentar ao usuario** — resumo + pedir confirmacao antes de executar
-16. **NAO executar sem confirmacao explicita**
+10. **Definir metricas** — como saber que deu certo
+11. **Definir rollback** — como reverter se der errado (quando aplicavel)
+12. **Salvar** — em `docs/00_overview/execution_plans/{NNN}_{nome}.md` (ver Regra de Numeracao abaixo)
+13. **Gerar prompt de execucao** — em `docs/04_operations/prompts_execucao_{NNN}_{nome}.md` (mesmo numero do plano, unico bloco orquestrado)
+14. **Apresentar ao usuario** — resumo + pedir confirmacao antes de executar
+15. **NAO executar sem confirmacao explicita**
 
 ---
 

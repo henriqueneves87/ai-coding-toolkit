@@ -129,7 +129,6 @@ Ao gerar tarefas, referenciar skills aplicaveis:
 
 Este command pode ser combinado com:
 
-- `/governed-task` — para tarefas governadas que precisam de plano
 - `/context-boot` — para carregar contexto antes de planejar
 - `/apply-conventions` — validacao pre-geracao apos plano aprovado
 
