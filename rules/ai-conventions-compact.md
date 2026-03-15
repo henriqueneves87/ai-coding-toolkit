@@ -48,4 +48,5 @@ Nenhuma key em código. `.env` obrigatório. Logs sem dados sensíveis.
 - Git/commits/PRs → skill `git-workflow`
 - Docs → skill `create-documentation`
 - Planejamento multi-etapas → skill `create-execution-plan`
+- Revisao pos-execucao → skill `review-execution` (via `/review-execution`)
 - UI/UX React/Next.js → skill `frontend-conventions`

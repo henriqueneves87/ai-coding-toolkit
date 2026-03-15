@@ -5,7 +5,7 @@ description: Lista todos os comandos com exemplos de uso.
 
 # /help-commands
 
-Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
+Guia de referencia rapida dos 13 commands ativos do AI Coding Toolkit v5.1.
 
 ---
 
@@ -103,6 +103,15 @@ Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
 
 ---
 
+### /review-execution
+**O que faz:** Revisao pos-execucao — compara fontes de verdade (execution plan, docs, roadmap) com codigo real. Gera relatorio de inconsistencias classificadas por severidade e oferece gerar plano de correcao.
+
+**Quando usar:** Apos executar um execution plan, apos concluir fase de desenvolvimento, quando suspeitar que implementacao ficou incompleta.
+
+**Quando o Cursor falha sem ele:** Nao verifica se o que planejou foi implementado. Implementacoes superficiais (stubs, TODOs) passam despercebidas. Docs ficam desatualizados sem ninguem perceber.
+
+---
+
 ### /summarize-session
 **O que faz:** Gera resumo estruturado da sessao — o que foi feito, decisoes tomadas, pendencias, proximos passos. Serve como insumo para `/update-context`.
 
@@ -132,6 +141,7 @@ Guia de referencia rapida dos 12 commands ativos do AI Coding Toolkit v5.1.
 | `/optimize-context` | Moderado | context.md > 300 linhas |
 | `/checkpoint-and-branch` | Moderado | Antes de mudancas estruturais |
 | `/architecture-review` | Mensal | Auditoria proativa |
+| `/review-execution` | Moderado | Apos executar plano ou concluir fase |
 | `/decision-report` | Ocasional | Decisoes com rastreabilidade |
 | `/summarize-session` | Ocasional | Encerramento de sessao longa |
 | `/help-commands` | Ocasional | Referencia |
