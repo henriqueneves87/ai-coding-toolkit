@@ -9,3 +9,6 @@ desktop.ini
 
 # Backups criados pelo instalador
 *_backup_*
+
+# Backups locais de toolkits removidos
+backup-*.zip

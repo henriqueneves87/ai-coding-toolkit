@@ -1,6 +1,6 @@
 # AI Coding Toolkit
 
-Coleção de **skills**, **commands**, **agents** e **rules** para Cursor, Windsurf e Trae, projetados para governança de IA, qualidade de código e produtividade. Transforma assistentes de IA em engenheiros disciplinados: planejamento antes de execução, logs legíveis, tratamento de erro explícito e commits com critério de valor.
+Coleção de **skills**, **commands**, **agents** e **rules** para o [Cursor IDE](https://cursor.sh), projetados para governança de IA, qualidade de código e produtividade. Transforma assistentes de IA em engenheiros disciplinados: planejamento antes de execução, logs legíveis, tratamento de erro explícito e commits com critério de valor.
 
 > **Documentação completa:** [`docs/manual.md`](docs/manual.md)
 
@@ -115,26 +115,6 @@ Ou use o instalador:
 chmod +x install.sh && ./install.sh
 ```
 
-### Windsurf
-
-```bash
-cd windsurf-toolkit
-.\install.ps1          # Windows
-./install.sh           # Linux/Mac
-```
-
-Skills, workflows e rules são instalados globalmente em `~/.codeium/windsurf/`.
-
-### Trae
-
-```bash
-cd trae-toolkit
-.\install.ps1 -ProjectPath "C:\caminho\do\projeto"   # Windows
-./install.sh /caminho/do/projeto                      # Linux/Mac
-```
-
-O `project_rules.md` compilado é copiado para `.trae/project_rules.md` do projeto alvo.
-
 ---
 
 ## Opções do instalador (Cursor)
@@ -238,11 +218,9 @@ ai-coding-toolkit/
 │   ├── ai-conventions-compact.md
 │   ├── skills-auto-apply.md
 │   └── project-specific-template.md
-├── templates/               # Pre-commit + CI
-│   ├── .pre-commit-config.yaml
-│   └── .github/workflows/ci.yml
-├── windsurf-toolkit/        # Adaptação para Windsurf
-└── trae-toolkit/            # Adaptação para Trae
+└── templates/               # Pre-commit + CI
+    ├── .pre-commit-config.yaml
+    └── .github/workflows/ci.yml
 ```
 
 ---
