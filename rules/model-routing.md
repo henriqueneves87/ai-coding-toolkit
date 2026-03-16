@@ -31,7 +31,7 @@ Claude 4.6 Sonnet ($3/$15) | GPT-5.4 ($2.5/$15)
 
 **Tier premium — pool API, usar com critério:**
 Claude 4.6 Opus ($5/$25) | GPT-5 ($1.25/$10 mas reasoning forte)
-→ create-execution-plan complexo, architecture-review, decisões arquiteturais, extração de regras de negócio de legado.
+→ create-execution-plan complexo, architecture-review, decisões arquiteturais, legacy-audit Fase 1 (extração de regras de negócio).
 
 ## Regra de Economia
 

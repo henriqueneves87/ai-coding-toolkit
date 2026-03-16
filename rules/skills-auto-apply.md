@@ -17,6 +17,7 @@ alwaysApply: true
 | Planejamento ou tarefa multi-etapas | `create-execution-plan` |
 | Revisao pos-execucao via `/review-execution` | `review-execution` |
 | context.md > 300 linhas ou `/optimize-context` | `optimize-context` |
+| Auditoria de sistema legado via `/legacy-audit` | `legacy-audit` |
 
 # Agents Disponíveis
 
